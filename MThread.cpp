@@ -24,6 +24,6 @@ void MThread::run()
 	Reactor rat;
 
 	rat.init(10000, Reactor::ET);
-	rat.add( &server, Reactor::IN, MServer::handleConnect);
+	rat.add( &g_server, Reactor::IN, MServer::handleConnect);
 	rat.eventLoop();
 }

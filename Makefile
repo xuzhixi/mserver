@@ -23,18 +23,20 @@ AR_DEBUG=ar  cqs
 ################################################################################
 	
 OBJECTS=\
+	MServer.o\
 	buffer.o\
-	main.o\
-	mthread.o\
 	global.o\
-	mserver.o\
+	AnalysePackTask.o\
+	MThread.o\
+	main.o\
 	
 OBJECTS_DEBUG=\
+	MServer.od\
 	buffer.od\
-	main.od\
-	mthread.od\
 	global.od\
-	mserver.od\
+	AnalysePackTask.od\
+	MThread.od\
+	main.od\
 	
 ################################################################################
 ### Project Files ##############################################################
@@ -42,41 +44,55 @@ OBJECTS_DEBUG=\
 	
 all: $(OBJECTS)
 	$(CPP_LINKER) mserver $(OBJECTS) $(LIBS)
-buffer.o: ./buffer.cpp
+MServer.o: ./MServer.cpp\
+	./global.h\
+	./MServer.h\
+	./Buffer.h
+	$(CPP) MServer.o ./MServer.cpp
+buffer.o: ./buffer.cpp\
+	./global.h\
+	./Buffer.h
 	$(CPP) buffer.o ./buffer.cpp
-main.o: ./main.cpp\
-	./global.h\
-	./MThread.h
-	$(CPP) main.o ./main.cpp
-mthread.o: ./mthread.cpp\
-	./global.h\
-	./MThread.h
-	$(CPP) mthread.o ./mthread.cpp
 global.o: ./global.cpp\
 	./global.h
 	$(CPP) global.o ./global.cpp
-mserver.o: ./mserver.cpp\
+AnalysePackTask.o: ./AnalysePackTask.cpp
+	$(CPP) AnalysePackTask.o ./AnalysePackTask.cpp
+MThread.o: ./MThread.cpp\
+	./MThread.h\
+	./global.h\
+	./MServer.h
+	$(CPP) MThread.o ./MThread.cpp
+main.o: ./main.cpp\
+	./MThread.h\
 	./global.h
-	$(CPP) mserver.o ./mserver.cpp
+	$(CPP) main.o ./main.cpp
 	
 debug: $(OBJECTS_DEBUG)
 	$(CPP_LINKER_DEBUG) mserver $(OBJECTS_DEBUG) $(LIBS)
-buffer.od: ./buffer.cpp
+MServer.od: ./MServer.cpp\
+	./global.h\
+	./MServer.h\
+	./Buffer.h
+	$(CPP_DEBUG) MServer.od ./MServer.cpp
+buffer.od: ./buffer.cpp\
+	./global.h\
+	./Buffer.h
 	$(CPP_DEBUG) buffer.od ./buffer.cpp
-main.od: ./main.cpp\
-	./global.h\
-	./MThread.h
-	$(CPP_DEBUG) main.od ./main.cpp
-mthread.od: ./mthread.cpp\
-	./global.h\
-	./MThread.h
-	$(CPP_DEBUG) mthread.od ./mthread.cpp
 global.od: ./global.cpp\
 	./global.h
 	$(CPP_DEBUG) global.od ./global.cpp
-mserver.od: ./mserver.cpp\
+AnalysePackTask.od: ./AnalysePackTask.cpp
+	$(CPP_DEBUG) AnalysePackTask.od ./AnalysePackTask.cpp
+MThread.od: ./MThread.cpp\
+	./MThread.h\
+	./global.h\
+	./MServer.h
+	$(CPP_DEBUG) MThread.od ./MThread.cpp
+main.od: ./main.cpp\
+	./MThread.h\
 	./global.h
-	$(CPP_DEBUG) mserver.od ./mserver.cpp
+	$(CPP_DEBUG) main.od ./main.cpp
 	
 install:
 	echo 'install command not set'

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8' ?>
+
+<connect>
+	<!-- global property -->
+	<!-- Echo all executed SQL to stdout -->
+	<property name="show_sql" value="true" />
+
+	<pool name="test">
+		<property name="size" value="10" />
+		<property name="dbtype" value="mysql" />
+		<property name="dbname" value="test" />
+		<property name="host" value="192.168.136.1" />		
+		<property name="port" value="3306" />
+		<property name="username" value="root" />
+		<property name="password" value="2185530" />
+	</pool>
+
+</connect>
+
