@@ -6,27 +6,26 @@
  *  Email   932834199@qq.com or 932834199@163.com
  *
  *  Create datetime:  2012-10-30 22:12:15
- *  Last   modified:  2012-11-01 11:02:21
+ *  Last   modified:  2012-11-02 10:41:18
  *
  *  Description: 
  */
 //================================================
 
-#include "global.h"
 #include "OPS_TcpServer.h"
 #include "OPS_ThreadPool.h"
-#include "OPS_HashMap.h"
-#include "OPS_Mutex.h"
-#include "OPS_MutexGuard.h"
 #include "OPS_DbConnectPool.h"
+#include "global.h"
+#include "Online.h"
+#include "SendThreadPool.h"
 
 using OPS::TcpServer;
 using OPS::ThreadPool;
-using OPS::Mutex;
-using OPS::MutexGuard;
 using OPS::DbConnectPool;
 
 TcpServer g_server;
-ThreadPool *g_analyse_pools;
-DbConnectPool g_dbconnect_pools;
+ThreadPool *g_analyse_pools;		///< 分析已接收数据包的线程池
+DbConnectPool g_dbconnect_pools;	///< 数据库连接池
+Online online;						///< 在线信息对象
+SendThreadPool *g_send_pools;		///< 发送数据线程池
 

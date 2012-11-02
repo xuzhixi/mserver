@@ -16,15 +16,15 @@
 #define __BUFFER_H
 
 #include "OPS_IBuffer.h"
-#include "OPS_Socket.h"
+#include "OPS_TcpSocket.h"
 
 using OPS::IBuffer;
-using OPS::Socket;
+using OPS::TcpSocket;
 
 class Buffer : public IBuffer
 {
 	public:
-		Buffer(Socket *sk);
+		Buffer(TcpSocket *sk);
 		~Buffer();
 		void append(char *data, int len);
 	
@@ -34,7 +34,7 @@ class Buffer : public IBuffer
 		void postPack(char *data, int len);
 
 	private:
-		Socket *sk;
+		TcpSocket *sk;
 		char *buffer;
 		int useSize;
 		int totalSize;

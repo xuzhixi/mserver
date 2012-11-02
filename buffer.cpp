@@ -6,7 +6,7 @@
  *  Email   932834199@qq.com or 932834199@163.com
  *
  *  Create datetime:  2012-10-30 14:24:26
- *  Last   modified:  2012-11-01 10:09:38
+ *  Last   modified:  2012-11-02 09:59:13
  *
  *  Description: 
  */
@@ -20,7 +20,7 @@
 
 using OPS::String;
 
-Buffer::Buffer(Socket *sk)
+Buffer::Buffer(TcpSocket *sk)
 {
 	this->sk = sk;
 	this->buffer = (char *)malloc( MAX_PACKAGE_SIZE );
@@ -153,3 +153,4 @@ int Buffer::residueCpy(char *dst, char *src, char *finish)
 
 	return len;
 }
+

@@ -16,10 +16,11 @@
 #include "ky_log.h"
 #include "OPS_IThread.h"
 #include "AnalysePackTask.h"
+#include "global.h"
 
 using OPS::IThread;
 
-AnalysePackTask::AnalysePackTask(Socket *sk, char *data)
+AnalysePackTask::AnalysePackTask(TcpSocket *sk, char *data)
 {
 	this->sk = sk;
 	this->data = data;
@@ -38,6 +39,9 @@ bool AnalysePackTask::execute()
 	if ( this->data != NULL )
 	{
 		KY_LOG_DEBUG("thread(%u) analyse pack task, data: %s", IThread::currentTid(), data);
+		char *buf = (char *)malloc( 100 );
+		sprintf(buf, "Welcome to you!");
+		this->sk->sendToQueue(buf, strlen(buf)); 
 		return true;
 	}
 

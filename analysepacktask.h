@@ -16,21 +16,21 @@
 #define __ANALYSEPACKTASK_H
 
 #include "OPS_Task.h"
-#include "OPS_Socket.h"
+#include "OPS_TcpSocket.h"
 
 using OPS::Task;
-using OPS::Socket;
+using OPS::TcpSocket;
 
 /// 分析数据包
 class AnalysePackTask : public Task
 {
 	public:
-		AnalysePackTask(Socket *sk, char *data);
+		AnalysePackTask(TcpSocket *sk, char *data);
 		~AnalysePackTask();
 		bool execute();
 
 	private:
-		Socket *sk; 
+		TcpSocket *sk; 
 		char *data; ///< 数据
 };
 

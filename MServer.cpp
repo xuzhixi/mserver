@@ -6,7 +6,7 @@
  *  Email   932834199@qq.com or 932834199@163.com
  *
  *  Create datetime:  2012-10-30 22:12:52
- *  Last   modified:  2012-11-01 10:09:46
+ *  Last   modified:  2012-11-02 12:11:29
  *
  *  Description: 
  */
@@ -36,9 +36,10 @@ void MServer::handleConnect(Socket *sk, Reactor *rat)
 	while ( (client=svr->accept(false)) != NULL )
 	{
 		KY_LOG_INFO("thread(%lu) coming connect socket(%d) peerIp: %s peerPort: %d", IThread::currentTid(), client->getFd(), client->getPeerIp(), client->getPeerPort());
-		client->setBuffer( new Buffer(client) );	// 给新进入的连接，创建一个缓冲区
+		client->setRecvBuffer( new Buffer(client) );	// 给新进入的连接，创建一个缓冲区
+		g_send_pools->push( client );
 		rat->add(client, Reactor::IN, MServer::readyRead);
-		rat->add(client, Reactor::OUT, MServer::readyWrite);
+		//rat->add(client, Reactor::OUT, MServer::readyWrite);
 	}
 
 }
@@ -46,7 +47,7 @@ void MServer::handleConnect(Socket *sk, Reactor *rat)
 void MServer::readyRead(Socket *sk, Reactor *rat)
 {
 	TcpSocket *socket = (TcpSocket *)sk;
-	static IBuffer *buffer = socket->getBuffer(); // 获取buffer
+	static IBuffer *buffer = socket->getRecvBuffer(); // 获取buffer
 	char data[RECEIVE_SIZE];
 	ssize_t recvLen;
 
@@ -62,6 +63,7 @@ void MServer::readyRead(Socket *sk, Reactor *rat)
 		else if ( recvLen == 0 )	// socket连接断开
 		{
 			KY_LOG_INFO("peer socket(%d) close", socket->getFd());
+			g_send_pools->remove( socket );
 			rat->delOwn( socket );
 			break;
 		}
@@ -70,6 +72,7 @@ void MServer::readyRead(Socket *sk, Reactor *rat)
 			if ( errno != EAGAIN )	// 如果不是EAGAIN(表示没有可读数据), 表示发生错误
 			{
 				KY_LOG_ERROR("socket recv happen error, already close fd=%d", socket->getFd());
+				g_send_pools->remove( socket );
 				rat->delOwn( socket );
 			}
 			break;
@@ -80,6 +83,6 @@ void MServer::readyRead(Socket *sk, Reactor *rat)
 void MServer::readyWrite(Socket *sk, Reactor *rat)
 {
 	// 第一次连接进来会被触发一次
-	//KY_LOG_INFO("readyWrite socket(%d)", sk->getFd());
+	KY_LOG_INFO("readyWrite socket(%d)", sk->getFd());
 }
 

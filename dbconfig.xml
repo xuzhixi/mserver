@@ -12,7 +12,7 @@
 		<property name="host" value="192.168.136.1" />		
 		<property name="port" value="3306" />
 		<property name="username" value="root" />
-		<property name="password" value="2185530" />
+		<property name="password" value="123456" />
 	</pool>
 
 </connect>
