@@ -6,7 +6,7 @@
  *  Email   932834199@qq.com or 932834199@163.com
  *
  *  Create datetime:  2012-10-30 22:12:52
- *  Last   modified:  2012-11-02 12:11:29
+ *  Last   modified:  2012-11-03 11:37:17
  *
  *  Description: 
  */
@@ -47,7 +47,7 @@ void MServer::handleConnect(Socket *sk, Reactor *rat)
 void MServer::readyRead(Socket *sk, Reactor *rat)
 {
 	TcpSocket *socket = (TcpSocket *)sk;
-	static IBuffer *buffer = socket->getRecvBuffer(); // 获取buffer
+	IBuffer *buffer = socket->getRecvBuffer(); // 获取buffer
 	char data[RECEIVE_SIZE];
 	ssize_t recvLen;
 
