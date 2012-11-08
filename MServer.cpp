@@ -6,7 +6,7 @@
  *  Email   932834199@qq.com or 932834199@163.com
  *
  *  Create datetime:  2012-10-30 22:12:52
- *  Last   modified:  2012-11-03 11:37:17
+ *  Last   modified:  2012-11-07 09:52:03
  *
  *  Description: 
  */
@@ -36,7 +36,7 @@ void MServer::handleConnect(Socket *sk, Reactor *rat)
 	while ( (client=svr->accept(false)) != NULL )
 	{
 		KY_LOG_INFO("thread(%lu) coming connect socket(%d) peerIp: %s peerPort: %d", IThread::currentTid(), client->getFd(), client->getPeerIp(), client->getPeerPort());
-		client->setRecvBuffer( new Buffer(client) );	// 给新进入的连接，创建一个缓冲区
+		client->setAppRecvBuffer( new Buffer(client) );	// 给新进入的连接，创建一个应用层的缓冲区
 		g_send_pools->push( client );
 		rat->add(client, Reactor::IN, MServer::readyRead);
 		//rat->add(client, Reactor::OUT, MServer::readyWrite);
@@ -47,7 +47,7 @@ void MServer::handleConnect(Socket *sk, Reactor *rat)
 void MServer::readyRead(Socket *sk, Reactor *rat)
 {
 	TcpSocket *socket = (TcpSocket *)sk;
-	IBuffer *buffer = socket->getRecvBuffer(); // 获取buffer
+	IBuffer *buffer = socket->getAppRecvBuffer(); // 获取buffer
 	char data[RECEIVE_SIZE];
 	ssize_t recvLen;
 

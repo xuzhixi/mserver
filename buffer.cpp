@@ -25,8 +25,8 @@ Buffer::Buffer(TcpSocket *sk)
 	this->sk = sk;
 	this->buffer = (char *)malloc( MAX_PACKAGE_SIZE );
 	memset( this->buffer, 0, MAX_PACKAGE_SIZE );
-	this->useSize = 0;
 	this->totalSize = MAX_PACKAGE_SIZE;
+	this->useSize = 0;
 	this->lastPos = this->buffer;
 	this->status = 0;
 }
@@ -44,8 +44,13 @@ void Buffer::append(char *data, int len)
 		char *newBuffer = (char *)malloc( totalSize );
 		memset( newBuffer, 0, totalSize );
 		memcpy( newBuffer, buffer, useSize );
+		pBegin  = newBuffer + (pBegin - buffer);
+		dBegin  = newBuffer + (dBegin - buffer);
+		lastPos = newBuffer + (lastPos - buffer);
+		sep		= newBuffer + (sep - buffer);
 		free( buffer );
 		buffer = newBuffer;
+		KY_LOG_DEBUG("current totalSize: %d", totalSize);
 	}
 	memcpy( buffer+useSize, data, len );	// 拷贝新的数据
 	useSize += len;
@@ -53,6 +58,7 @@ void Buffer::append(char *data, int len)
 
 	while (1)
 	{
+		KY_LOG_DEBUG("status: %d", status);
 		if ( status == 0 )
 		{
 			char *pos = searchChar(lastPos, useEnd, PACKAGE_BEGIN);
@@ -63,7 +69,8 @@ void Buffer::append(char *data, int len)
 				status = 1;		// 跳到下一步
 				continue;
 			}
-			lastPos = useEnd;
+			lastPos = buffer;
+			useSize = 0;
 			break;
 		}
 		else if ( status == 1 )
